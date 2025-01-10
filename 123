@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日日期和天气</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #weather {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>每日日期和天气</h1>
+    <div id="date"></div>
+    <div id="weather"></div>
+
+    <script>
+        // 获取当前日期并显示
+        function displayDate() {
+            const dateElement = document.getElementById('date');
+            const today = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            dateElement.textContent = today.toLocaleDateString('zh-CN', options);
+        }
+
+        // 获取天气信息并显示
+        async function displayWeather() {
+            const apiKey = 'YOUR_API_KEY'; // 替换为你的 OpenWeatherMap API 密钥
+            const city = 'YOUR_CITY'; // 替换为你的城市名称
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=zh_cn`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const weatherElement = document.getElementById('weather');
+                const description = data.weather[0].description;
+                const temp = data.main.temp;
+
+                weatherElement.textContent = `当前天气：${description}，温度：${temp}°C`;
+            } catch (error) {
+                console.error('获取天气信息失败:', error);
+            }
+        }
+
+        // 初始化页面内容
+        function init() {
+            displayDate();
+            displayWeather();
+        }
+
+        // 执行初始化函数
+        window.onload = init;
+    </script>
+</body>
+</html>
